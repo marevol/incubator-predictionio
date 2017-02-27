@@ -79,7 +79,7 @@ val dataHdfs = (project in file("storage/hdfs")).
   settings(commonSettings: _*).
   settings(genjavadocSettings: _*)
 
-val dataJdbc = (project in file("storeage/jdbc")).
+val dataJdbc = (project in file("storage/jdbc")).
   settings(commonSettings: _*).
   settings(genjavadocSettings: _*)
 
