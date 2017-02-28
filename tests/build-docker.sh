@@ -33,6 +33,8 @@ pushd $DIR/..
 sbt/sbt clean
 mkdir assembly
 cp dist/lib/*.jar assembly/
+mkdir -p lib/spark
+cp dist/lib/spark/*.jar lib/spark
 docker build -t predictionio/pio .
 popd
 docker build -t predictionio/pio-testing $DIR
