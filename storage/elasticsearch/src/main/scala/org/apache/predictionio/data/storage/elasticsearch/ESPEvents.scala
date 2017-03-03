@@ -97,9 +97,10 @@ class ESPEvents(client: ESClient, config: StorageClientConfig, index: String)
     events: RDD[Event],
     appId: Int, channelId: Option[Int])(sc: SparkContext): Unit = {
     val estype = getEsType(appId, channelId)
+    val conf = Map("es.resource" -> s"$index/$estype", "es.nodes" -> getESNodes())
     events.map { event =>
       ESEventsUtil.eventToPut(event, appId)
-    }.saveToEs(s"$index/$estype")
+    }.saveToEs(conf)
   }
 
   override def delete(
@@ -119,7 +120,7 @@ class ESPEvents(client: ESClient, config: StorageClientConfig, index: String)
             val response = restClient.performRequest(
               "POST",
               s"/$index/$estype/_delete_by_query",
-              Map.empty[String, String].asJava)
+              Map("refresh" -> "true").asJava)
             val jsonResponse = parse(EntityUtils.toString(response.getEntity))
             val result = (jsonResponse \ "result").extract[String]
             result match {
